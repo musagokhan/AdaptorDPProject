@@ -1,0 +1,66 @@
+@startuml
+
+title UML Diagram for Adaptor Pattern Project
+
+package "mainWork" {
+    class Manager {
+        + main(String[] args): void
+    }
+}
+
+package "mainWork.adaptor" {
+    class VoltageAdaptor5V {
+        - powerSource: IPowerSource
+        + VoltageAdaptor5V(IPowerSource powerSource)
+        + getVoltage(): int
+    }
+}
+
+package "mainWork.powerSs" {
+    interface IPowerSource {
+        + getVoltage(): int
+    }
+
+    class Socket220V {
+        + getVoltage(): int
+    }
+}
+
+package "mainWork.directlyHomeEquipment" {
+    interface IAppliance {
+        + turnOn(): void
+        + plugIn(IPowerSource powerSource): void
+    }
+
+    class Iron {
+        - powerSource: IPowerSource
+        + turnOn(): void
+        + plugIn(IPowerSource powerSource): void
+    }
+
+    class Refrigerator {
+        - powerSource: IPowerSource
+        + turnOn(): void
+        + plugIn(IPowerSource powerSource): void
+    }
+}
+
+package "mainWork.depentAdaptorHomeEq" {
+    class Phone {
+        + charge(int voltage): void
+    }
+}
+
+Manager --> IPowerSource : "uses"
+Manager --> IAppliance : "uses"
+Manager --> Phone : "uses"
+
+IAppliance --> IPowerSource : "uses"
+VoltageAdaptor5V --> IPowerSource : "adapts"
+Phone --> VoltageAdaptor5V : "uses"
+
+Socket220V ..|> IPowerSource
+Iron ..|> IAppliance
+Refrigerator ..|> IAppliance
+
+@enduml
